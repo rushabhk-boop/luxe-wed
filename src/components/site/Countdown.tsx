@@ -45,7 +45,7 @@ export function Countdown({
     <div className="lw-count" role="timer" aria-live="off">
       {cells.map(([v, label]) => (
         <div className="lw-count-cell" key={label}>
-          <span className="lw-count-num">{v == null ? "–" : label === L.days ? v : pad(v)}</span>
+          <span className="lw-count-num" key={v == null ? "x" : v}>{v == null ? "–" : label === L.days ? v : pad(v)}</span>
           <span className="lw-count-label">{label}</span>
         </div>
       ))}

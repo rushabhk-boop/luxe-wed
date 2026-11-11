@@ -7,6 +7,7 @@ import { dotDate, formatDate, formatTime } from "@/lib/time";
 import type { Bundle, SectionKey, WeddingEvent } from "@/lib/types";
 import { Countdown } from "./Countdown";
 import { Divider, EventIcon, Frame, iconFor, MinimalArch, Moon, RoyalArch, Sprig, Star } from "./Ornaments";
+import { Petals, SplitName } from "./Motion";
 import { RsvpForm } from "./RsvpForm";
 import { SiteAnimator } from "./SiteAnimator";
 
@@ -122,7 +123,7 @@ export function WeddingSite({
             const icon = iconFor(e.kind, e.illustration);
             const map = mapsLink(e.maps_url, e.venue, e.address);
             return (
-              <article className="lw-card lw-reveal" key={e.id} style={{ transitionDelay: `${(n % 2) * 90}ms` }}>
+              <article className="lw-card lw-reveal" key={e.id} style={{ transitionDelay: `${(n % 3) * 120}ms` }}>
                 <div className="lw-card-in">
                   {icon && <EventIcon name={icon} className="lw-card-icon lw-orn" />}
                   <span className="lw-card-num">{String(n + 1).padStart(2, "0")}</span>
@@ -259,6 +260,7 @@ export function WeddingSite({
             </svg>
           </>
         )}
+        {mode !== "thumb" && <Petals theme={theme} />}
       </div>
       {(theme === "luxury" || theme === "royal") && <Frame className="lw-frame lw-ornate" />}
       <div className="lw-hero-in">
@@ -268,10 +270,10 @@ export function WeddingSite({
         <div className="lw-monogram lw-rise" style={{ animationDelay: "0.15s" }} aria-hidden>
           {mono}
         </div>
-        <h1 className="lw-names">
-          <span className="lw-name lw-rise" style={{ animationDelay: "0.25s" }}>{a || "Bride"}</span>
-          <span className="lw-and lw-rise" style={{ animationDelay: "0.45s" }}>&amp;</span>
-          <span className="lw-name lw-rise" style={{ animationDelay: "0.6s" }}>{b || "Groom"}</span>
+        <h1 className="lw-names" aria-label={`${a || "Bride"} & ${b || "Groom"}`}>
+          <SplitName className="lw-name lw-rise" delay={0.25} text={a || "Bride"} />
+          <span className="lw-and lw-rise" style={{ animationDelay: "0.55s" }}>&amp;</span>
+          <SplitName className="lw-name lw-rise" delay={0.7} text={b || "Groom"} />
         </h1>
         <p className="lw-invite lw-rise" style={{ animationDelay: "0.8s" }}>{L.invite}</p>
         {w.wedding_date && (
@@ -305,6 +307,7 @@ export function WeddingSite({
       )}
       {mode !== "thumb" && (
         <nav className="lw-nav" aria-label="Wedding sections">
+          <span className="lw-progress" aria-hidden />
           <a href="#top" className="lw-nav-mono">{mono}</a>
           <div className="lw-nav-links">
             {order

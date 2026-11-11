@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SiteFooter, SiteHeader } from "@/components/marketing/Chrome";
 import { HeroPreview } from "@/components/marketing/HeroPreview";
+import { Petals } from "@/components/site/Motion";
 import { ThemeThumb } from "@/components/marketing/ThemeThumb";
 import { THEME_LIST } from "@/lib/themes";
 
@@ -40,6 +41,9 @@ export default function Home() {
       <main>
         <section className="relative overflow-hidden border-b border-line">
           <div className="hairline-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]" aria-hidden />
+          <div className="pointer-events-none absolute inset-0 opacity-70 [--accent:var(--color-champagne)] [&_.lw-petals]:block" aria-hidden>
+            <Petals theme="royal" count={10} />
+          </div>
           <svg viewBox="0 0 600 600" className="pointer-events-none absolute -left-40 top-24 w-[560px] text-champagne/40" fill="none" stroke="currentColor" aria-hidden>
             <path d="M80 600 V280 A220 220 0 0 1 520 280 V600" />
             <path d="M130 600 V290 A170 170 0 0 1 470 290 V600" />
@@ -49,9 +53,9 @@ export default function Home() {
             <div className="reveal">
               <p className="eyebrow">LUXE WED · Wedding website builder</p>
               <h1 className="display mt-6 text-[3.4rem] leading-[0.98] sm:text-7xl xl:text-[5.6rem]">
-                Your Wedding.<br />
-                <em className="text-gold">Your Story.</em><br />
-                Your Website.
+                <span className="hero-line" style={{ "--i": 0 } as React.CSSProperties}>Your Wedding.</span><br />
+                <em className="hero-line" style={{ "--i": 1 } as React.CSSProperties}><span className="sheen">Your Story.</span></em><br />
+                <span className="hero-line" style={{ "--i": 2 } as React.CSSProperties}>Your Website.</span>
               </h1>
               <p className="mt-8 max-w-lg text-lg leading-relaxed text-ink-soft">
                 Create a beautiful personalized wedding website in minutes. Share your special moments, celebrations, event details and memories with everyone you love.
@@ -70,14 +74,14 @@ export default function Home() {
 
         <section id="how" className="mx-auto max-w-7xl scroll-mt-20 px-5 py-24 sm:px-10">
           <div className="grid gap-10 lg:grid-cols-[1fr_2fr]">
-            <div>
+            <div data-reveal>
               <p className="eyebrow">How it works</p>
               <h2 className="display mt-4 text-5xl leading-[1.05]">From “yes” to a website, in four quiet steps.</h2>
             </div>
             <ol className="grid gap-px border border-line bg-line sm:grid-cols-2">
-              {STEPS.map(([n, t, d]) => (
-                <li key={n} className="bg-ivory p-8">
-                  <span className="font-display text-5xl text-champagne">{n}</span>
+              {STEPS.map(([n, t, d], i) => (
+                <li key={n} className="group bg-ivory p-8 transition-colors duration-500 hover:bg-paper" data-reveal style={{ "--i": i } as React.CSSProperties}>
+                  <span className="inline-block font-display text-5xl text-champagne transition-transform duration-500 group-hover:-translate-y-1">{n}</span>
                   <h3 className="mt-4 font-display text-3xl">{t}</h3>
                   <p className="mt-3 text-ink-soft">{d}</p>
                 </li>
@@ -88,7 +92,7 @@ export default function Home() {
 
         <section className="border-y border-line bg-sand/50">
           <div className="mx-auto max-w-7xl px-5 py-24 sm:px-10">
-            <div className="flex flex-wrap items-end justify-between gap-6">
+            <div className="flex flex-wrap items-end justify-between gap-6" data-reveal>
               <div>
                 <p className="eyebrow">Explore wedding designs</p>
                 <h2 className="display mt-4 text-5xl">Six distinct identities</h2>
@@ -96,8 +100,8 @@ export default function Home() {
               <Link href="/designs" className="btn-outline">See all designs</Link>
             </div>
             <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              {THEME_LIST.map((t) => (
-                <Link key={t.key} href={`/designs/${t.key}`} className="group">
+              {THEME_LIST.map((t, i) => (
+                <Link key={t.key} href={`/designs/${t.key}`} className="group" data-reveal style={{ "--i": i % 3 } as React.CSSProperties}>
                   <ThemeThumb theme={t.key} />
                   <div className="mt-4 flex items-baseline justify-between">
                     <h3 className="font-display text-2xl">{t.name}</h3>
@@ -111,11 +115,12 @@ export default function Home() {
         </section>
 
         <section id="features" className="mx-auto max-w-7xl scroll-mt-20 px-5 py-24 sm:px-10">
-          <p className="eyebrow">Features</p>
-          <h2 className="display mt-4 max-w-2xl text-5xl leading-[1.05]">Everything your guests need. Nothing they don&apos;t.</h2>
+          <p className="eyebrow" data-reveal>Features</p>
+          <h2 className="display mt-4 max-w-2xl text-5xl leading-[1.05]" data-reveal>Everything your guests need. Nothing they don&apos;t.</h2>
           <div className="mt-14 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
-            {FEATURES.map(([t, d]) => (
-              <div key={t} className="border-t border-ink pt-5">
+            {FEATURES.map(([t, d], i) => (
+              <div key={t} className="group relative border-t border-line pt-5" data-reveal style={{ "--i": i % 4 } as React.CSSProperties}>
+                <span className="absolute -top-px left-0 h-px w-10 bg-ink transition-all duration-700 group-hover:w-full" aria-hidden />
                 <h3 className="font-display text-2xl">{t}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-ink-soft">{d}</p>
               </div>
@@ -125,7 +130,7 @@ export default function Home() {
 
         <section className="bg-ink text-ivory">
           <div className="mx-auto grid max-w-7xl gap-14 px-5 py-24 sm:px-10 lg:grid-cols-2">
-            <div>
+            <div data-reveal>
               <p className="text-[11px] font-medium uppercase tracking-[0.3em] text-champagne">Why LUXE WED</p>
               <h2 className="display mt-4 text-5xl leading-[1.05]">Designed like stationery. Built like software.</h2>
             </div>
@@ -135,9 +140,9 @@ export default function Home() {
                 ["Made for Indian weddings", "Multiple functions, families, dress codes and travel — the way real celebrations work."],
                 ["Private by design", "No accounts and no database. Your website lives in your link; RSVPs come straight to you."],
                 ["Free forever", "A static website hosted for free — nothing to install, nothing to renew."],
-              ].map(([t, d]) => (
-                <div key={t}>
-                  <span className="block h-px w-10 bg-champagne" />
+              ].map(([t, d], i) => (
+                <div key={t} className="group" data-reveal style={{ "--i": i } as React.CSSProperties}>
+                  <span className="block h-px w-10 bg-champagne transition-all duration-700 group-hover:w-20" />
                   <h3 className="mt-4 font-display text-2xl">{t}</h3>
                   <p className="mt-2 text-sm text-ivory/70">{d}</p>
                 </div>
@@ -147,9 +152,9 @@ export default function Home() {
         </section>
 
         <section id="faq" className="mx-auto max-w-4xl scroll-mt-20 px-5 py-24 sm:px-10">
-          <p className="eyebrow text-center">Frequently asked questions</p>
+          <p className="eyebrow text-center" data-reveal>Frequently asked questions</p>
           <h2 className="display mt-4 text-center text-5xl">Questions, answered</h2>
-          <div className="mt-12 divide-y divide-line border-y border-line">
+          <div className="mt-12 divide-y divide-line border-y border-line" data-reveal>
             {FAQ.map(([q, a]) => (
               <details key={q} className="group py-5">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-6 font-display text-2xl">
@@ -167,7 +172,7 @@ export default function Home() {
             <path d="M110 300 V150 A90 90 0 0 1 290 150 V300" />
             <path d="M0 290 H400" />
           </svg>
-          <div className="relative mx-auto max-w-3xl px-5 py-28 text-center">
+          <div className="relative mx-auto max-w-3xl px-5 py-28 text-center" data-reveal>
             <p className="eyebrow">Begin today</p>
             <h2 className="display mt-5 text-5xl leading-[1.02] sm:text-7xl">Every love story deserves its own website.</h2>
             <Link href="/create" className="btn-primary mt-10 px-10 py-4">Create your wedding website</Link>

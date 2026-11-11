@@ -24,12 +24,12 @@ export function HeroPreview() {
   return (
     <div className="relative">
       <div className="relative mx-auto grid max-w-[640px] grid-cols-[1fr_auto] items-end gap-4">
-        <div className="hidden sm:block h-[420px] border border-line bg-paper p-2 shadow-lift">
+        <div className="float-slower hidden sm:block h-[420px] border border-line bg-paper p-2 shadow-lift">
           <div className="mb-2 flex gap-1.5 px-1"><span className="h-2 w-2 rounded-full bg-line" /><span className="h-2 w-2 rounded-full bg-line" /><span className="h-2 w-2 rounded-full bg-line" /></div>
-          <div className="h-[calc(100%-16px)]"><PreviewFrame key={theme + "d"} bundle={bundle} device="desktop" /></div>
+          <div className="swap-in h-[calc(100%-16px)]" key={theme + "d"}><PreviewFrame bundle={bundle} device="desktop" /></div>
         </div>
-        <div className="mx-auto h-[460px] w-[230px] sm:-ml-24 sm:mb-[-28px]">
-          <PreviewFrame key={theme + "m"} bundle={bundle} device="mobile" />
+        <div className="float-slow mx-auto h-[460px] w-[230px] sm:-ml-24 sm:mb-[-28px]">
+          <div className="swap-in h-full" key={theme + "m"}><PreviewFrame bundle={bundle} device="mobile" /></div>
         </div>
       </div>
       <div className="mt-12 flex flex-wrap justify-center gap-2" role="group" aria-label="Try a design">

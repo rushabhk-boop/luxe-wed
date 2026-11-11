@@ -6,7 +6,7 @@ export function defaultDesign(weddingId: string, theme: ThemeKey = "minimalist")
   return {
     wedding_id: weddingId,
     ...themeDefaults(theme),
-    animation: "subtle",
+    animation: "elegant",
     section_order: [...ALL_SECTIONS],
     hidden_sections: [],
     texts: {},

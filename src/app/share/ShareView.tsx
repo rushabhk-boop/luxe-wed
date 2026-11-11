@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { BuilderHeader } from "@/components/dashboard/BuilderHeader";
+import { PosterCard } from "@/components/dashboard/PosterCard";
 import { SharePanel } from "@/components/dashboard/SharePanel";
 import { useWedding } from "@/components/dashboard/WeddingProvider";
 import { publishProblems } from "@/lib/validate";
@@ -23,7 +24,10 @@ export function ShareView() {
             <Link href="/create" className="btn-primary mt-6">Go to details</Link>
           </div>
         ) : (
-          <SharePanel />
+          <>
+            <SharePanel />
+            <PosterCard />
+          </>
         )}
       </main>
     </div>

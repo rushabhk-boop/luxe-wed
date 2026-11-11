@@ -150,8 +150,8 @@ export const DECORATIONS: { key: Design["decorations"]; name: string }[] = [
 
 export const ANIMATIONS: { key: Design["animation"]; name: string }[] = [
   { key: "none", name: "None" },
-  { key: "subtle", name: "Subtle fade" },
-  { key: "elegant", name: "Elegant rise" },
+  { key: "subtle", name: "Soft fade" },
+  { key: "elegant", name: "Elegant motion" },
 ];
 
 export const LAYOUTS: { key: Design["layout"]; name: string }[] = [

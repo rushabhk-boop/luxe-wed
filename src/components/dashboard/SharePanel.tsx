@@ -63,7 +63,7 @@ export function SharePanel() {
   return (
     <div className="card grid gap-8 p-6 sm:p-8 md:grid-cols-[1fr_240px]">
       <div className="min-w-0">
-        <p className="eyebrow flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-success" /> Ready to share</p>
+        <p className="eyebrow flex items-center gap-2"><span className="live-dot h-1.5 w-1.5 rounded-full bg-success" /> Ready to share</p>
         <p className="mt-2 font-display text-3xl">{names(bundle.wedding).both} — your wedding link</p>
         <p className="mt-2 text-sm text-ink-soft">
           Your whole website is inside this link. Anyone with it can open your website — no app, no sign-up.
@@ -91,10 +91,11 @@ export function SharePanel() {
           <p><strong className="font-medium text-ink-soft">Keep this link safe.</strong> It is also your backup: open it, press “Edit this website” at the bottom, and you can edit again on any device.</p>
         </div>
       </div>
-      <div className="flex flex-col items-center gap-3">
+      <div className="relative flex flex-col items-center gap-3">
+        {qr && <Burst />}
         {qr ? (
           // eslint-disable-next-line @next/next/no-img-element -- data: URL
-          <img src={qr} alt="QR code for your wedding website" className="h-[220px] w-[220px] border border-line bg-white p-2" />
+          <img src={qr} alt="QR code for your wedding website" className="qr-in h-[220px] w-[220px] border border-line bg-white p-2" />
         ) : (
           <div className="grid h-[220px] w-[220px] place-items-center border border-line bg-sand p-4 text-center text-xs text-stone">
             {tooLong ? "Too much text for a QR code. Shorten event descriptions or the welcome message." : "…"}
@@ -104,6 +105,20 @@ export function SharePanel() {
           {url.length > 1200 ? "A detailed website makes a dense QR code: print it at least 4 cm wide." : "Print it on invitation cards or place it at the venue."}
         </p>
       </div>
+    </div>
+  );
+}
+
+/** One-time champagne sparkle burst around the QR code when the link is ready. */
+function Burst() {
+  return (
+    <div className="burst -top-2 h-[236px]" aria-hidden>
+      {Array.from({ length: 14 }, (_, i) => (
+        <span
+          key={i}
+          style={{ "--a": `${(i * 360) / 14}deg`, "--r": `${120 + (i % 3) * 22}px`, "--w": `${(i % 4) * 0.06}s` } as React.CSSProperties}
+        />
+      ))}
     </div>
   );
 }

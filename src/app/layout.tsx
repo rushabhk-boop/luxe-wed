@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { ScrollReveal } from "@/components/marketing/ScrollReveal";
 import { fontVars } from "./fonts";
 import "./globals.css";
 import "./site.css";
@@ -23,7 +24,10 @@ export const viewport: Viewport = { themeColor: "#f8f4ec" };
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={fontVars}>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        {children}
+        <ScrollReveal />
+      </body>
     </html>
   );
 }
