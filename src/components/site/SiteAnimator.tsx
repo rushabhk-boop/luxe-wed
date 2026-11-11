@@ -9,7 +9,8 @@ const SHAPES = "path, circle, ellipse, line, polyline, polygon, rect";
  * - scroll-reveal for `.lw-reveal` elements inside the nearest `.lw-site`;
  * - line ornaments that draw themselves (each stroke gets pathLength=1 so CSS
  *   can animate stroke-dashoffset from 1 to 0, whatever the path's real length).
- * Runs before paint so ornaments never flash fully drawn first.
+ * Runs before paint so ornaments never flash fully drawn first. State is kept in
+ * data attributes: React rewrites class lists when the design changes.
  */
 export function SiteAnimator() {
   const ref = useRef<HTMLSpanElement>(null);
@@ -19,13 +20,14 @@ export function SiteAnimator() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     // The CSS only animates these under .anim-subtle / .anim-elegant, so switching
     // animation in the Design Studio takes effect without re-running this.
-    root.classList.add("lw-js", "lw-drawn");
+    root.setAttribute("data-lw-motion", "");
+    const settle = window.setTimeout(() => root.setAttribute("data-lw-settled", ""), 3200);
 
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
           if (e.isIntersecting) {
-            e.target.classList.add("is-in");
+            e.target.setAttribute("data-in", "");
             io.unobserve(e.target);
           }
         }
@@ -33,12 +35,12 @@ export function SiteAnimator() {
       { rootMargin: "0px 0px -8% 0px", threshold: 0.05 },
     );
     const scan = () => {
-      root.querySelectorAll(".lw-reveal:not(.is-in)").forEach((el) => io.observe(el));
+      root.querySelectorAll(".lw-reveal:not([data-in])").forEach((el) => io.observe(el));
       root.querySelectorAll(DRAWABLE).forEach((svg) => {
         svg.querySelectorAll(SHAPES).forEach((p) => {
-          if (p.classList.contains("lw-dp") || p.closest(".lw-star")) return;
+          if (p.hasAttribute("data-dp") || p.closest(".lw-star")) return;
           p.setAttribute("pathLength", "1");
-          p.classList.add("lw-dp");
+          p.setAttribute("data-dp", "");
         });
       });
     };
@@ -49,7 +51,9 @@ export function SiteAnimator() {
     return () => {
       io.disconnect();
       mo.disconnect();
-      root.classList.remove("lw-js", "lw-drawn");
+      window.clearTimeout(settle);
+      root.removeAttribute("data-lw-motion");
+      root.removeAttribute("data-lw-settled");
     };
   }, []);
   return <span ref={ref} hidden />;

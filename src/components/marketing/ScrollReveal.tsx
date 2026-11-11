@@ -16,7 +16,7 @@ export function ScrollReveal() {
       (entries) => {
         for (const e of entries) {
           if (e.isIntersecting) {
-            e.target.classList.add("is-in");
+            e.target.setAttribute("data-in", "");
             io.unobserve(e.target);
           }
         }
@@ -25,17 +25,17 @@ export function ScrollReveal() {
     );
     const seen = new WeakSet<Element>();
     const scan = () => {
-      document.querySelectorAll("[data-reveal]:not(.is-in)").forEach((el) => {
+      document.querySelectorAll("[data-reveal]:not([data-in])").forEach((el) => {
         if (seen.has(el)) return;
         seen.add(el);
         // Elements already on screen show straight away, without a hidden flash.
         const r = el.getBoundingClientRect();
-        if (r.top < window.innerHeight && r.bottom > 0) el.classList.add("is-in");
+        if (r.top < window.innerHeight && r.bottom > 0) el.setAttribute("data-in", "");
         else io.observe(el);
       });
     };
     scan();
-    html.classList.add("js-reveal");
+    html.setAttribute("data-reveal-ready", "");
     // Pages that render after loading (the builder waits for the saved draft) add elements later.
     let queued = 0;
     const mo = new MutationObserver(() => {

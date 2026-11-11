@@ -71,8 +71,9 @@ export function SetupWizard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // a new step starts at the top of the page, not halfway down the last one
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "instant" });
   }, [step]);
 
   const go = (n: number, validate = true) => {

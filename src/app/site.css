@@ -309,9 +309,12 @@
 
 .anim-subtle .lw-rise { animation: lw-fade 1.2s ease both; }
 .anim-elegant .lw-rise { animation: lw-rise 1.4s cubic-bezier(0.2, 0.7, 0.1, 1) both; }
-.anim-subtle.lw-js .lw-reveal { opacity: 0; transition: opacity 1s ease; }
-.anim-elegant.lw-js .lw-reveal { opacity: 0; transform: translateY(28px); transition: opacity 1.1s ease, transform 1.2s cubic-bezier(0.2, 0.7, 0.1, 1); }
-.lw-js .lw-reveal.is-in { opacity: 1; transform: none; }
+/* State lives in data attributes set by SiteAnimator, because React rewrites class
+   lists whenever the design changes. Hiding is instant; only the reveal animates. */
+.anim-subtle[data-lw-motion] .lw-reveal:not([data-in]) { opacity: 0; }
+.anim-elegant[data-lw-motion] .lw-reveal:not([data-in]) { opacity: 0; transform: translateY(28px); }
+.anim-subtle[data-lw-motion] .lw-reveal[data-in] { transition: opacity 1s ease; }
+.anim-elegant[data-lw-motion] .lw-reveal[data-in] { transition: opacity 1.1s ease, transform 1.2s cubic-bezier(0.2, 0.7, 0.1, 1); }
 .anim-subtle .lw-star, .anim-elegant .lw-star { animation: lw-twinkle 4s ease-in-out infinite; }
 .anim-subtle .lw-star:nth-child(3n), .anim-elegant .lw-star:nth-child(3n) { animation-delay: 1.3s; }
 .anim-subtle .lw-star:nth-child(3n+1), .anim-elegant .lw-star:nth-child(3n+1) { animation-delay: 2.4s; }
@@ -337,12 +340,16 @@
 .anim-elegant .lw-and.lw-rise { animation: lw-amp 1.5s cubic-bezier(0.2, 0.7, 0.1, 1) both; }
 .anim-elegant .lw-hero .lw-monogram.lw-rise { animation: lw-mono 1.6s cubic-bezier(0.2, 0.7, 0.1, 1) both; }
 
+/* after the intro (data-lw-settled), edits in the preview show straight away */
+[data-lw-settled] .lw-ch { animation: none !important; }
+[data-lw-settled] .lw-rise { animation-delay: 0s !important; animation-duration: 0.45s !important; }
+
 /* --- line ornaments draw themselves (pathLength=1 is set by SiteAnimator) --- */
 @keyframes lw-draw { to { stroke-dashoffset: 0; } }
-.anim-subtle.lw-drawn .lw-dp, .anim-elegant.lw-drawn .lw-dp { stroke-dasharray: 1; stroke-dashoffset: 1; }
-.anim-subtle.lw-drawn .lw-hero .lw-dp, .anim-elegant.lw-drawn .lw-hero .lw-dp { animation: lw-draw 3s cubic-bezier(0.45, 0, 0.2, 1) 0.2s forwards; }
-.anim-subtle.lw-drawn .lw-reveal .lw-dp, .anim-elegant.lw-drawn .lw-reveal .lw-dp { transition: stroke-dashoffset 1.9s cubic-bezier(0.45, 0, 0.2, 1) 0.3s; }
-.lw-drawn .lw-reveal.is-in .lw-dp { stroke-dashoffset: 0; }
+.anim-subtle[data-lw-motion] [data-dp], .anim-elegant[data-lw-motion] [data-dp] { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.anim-subtle[data-lw-motion] .lw-hero [data-dp], .anim-elegant[data-lw-motion] .lw-hero [data-dp] { animation: lw-draw 3s cubic-bezier(0.45, 0, 0.2, 1) 0.2s forwards; }
+.anim-subtle[data-lw-motion] .lw-reveal[data-in] [data-dp], .anim-elegant[data-lw-motion] .lw-reveal[data-in] [data-dp] { transition: stroke-dashoffset 1.9s cubic-bezier(0.45, 0, 0.2, 1) 0.3s; }
+.lw-reveal[data-in] [data-dp] { stroke-dashoffset: 0; }
 
 /* --- falling petals / rising sparks behind the hero (elegant only) --- */
 @keyframes lw-fall {
@@ -442,7 +449,7 @@
   .lw-site .lw-ch, .lw-site .lw-and, .lw-site .lw-monogram, .lw-site .lw-count-num, .lw-site .lw-scroll,
   .lw-site .lw-rsvp-done, .lw-site .lw-progress, .lw-site .lw-hero-in, .lw-site .lw-hero-bg { animation: none !important; }
   .lw-site .lw-petals { display: none !important; }
-  .lw-site .lw-dp { stroke-dasharray: none !important; }
+  .lw-site [data-dp] { stroke-dasharray: none !important; }
 }
 
 /* ==========================================================================
