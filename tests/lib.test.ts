@@ -101,6 +101,10 @@ describe("validation", () => {
     expect(publishProblems(b).map((p) => p.step)).toEqual([1, 2, 6]);
     expect(stepErrors(1, b)).toHaveProperty("bride_name");
   });
+  it("ignores stray spaces around names", () => {
+    expect(names({ bride_name: "Komal Kalal", groom_name: "Vivek Kalal", bride_display: "Komal ", groom_display: " Vivek " }).both).toBe("Komal & Vivek");
+    expect(names({ bride_name: " Komal Kalal", groom_name: "Vivek", bride_display: "  ", groom_display: "" }).both).toBe("Komal & Vivek");
+  });
   it("uses display names, then first names", () => {
     expect(names({ bride_name: "Riya Mehta", groom_name: "Rahul Kapoor", bride_display: "", groom_display: "Rahu" }).both).toBe("Riya & Rahu");
   });

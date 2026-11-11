@@ -284,7 +284,7 @@ export function WeddingSite({
         )}
         {(w.venue || w.city) && (
           <p className="lw-hero-place lw-rise" style={{ animationDelay: "1.05s" }}>
-            {[w.venue, w.city].filter(Boolean).join(", ")}
+            {[w.venue, w.city].map((x) => x?.trim()).filter(Boolean).join(", ")}
           </p>
         )}
         {w.wedding_date && (

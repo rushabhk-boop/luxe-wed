@@ -310,7 +310,7 @@ export async function drawPoster(bundle: Bundle, url: string): Promise<HTMLCanva
     ctx.fillText(formatDate(w.wedding_date, w.language), cx, y);
     y += 62;
   }
-  const place = [w.venue, w.city].filter(Boolean).join(", ");
+  const place = [w.venue, w.city].map((x) => x?.trim()).filter(Boolean).join(", ");
   if (place || w.wedding_time) {
     ctx.fillStyle = pal.accent;
     ctx.font = `500 26px ${fBody}`;

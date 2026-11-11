@@ -68,7 +68,7 @@ export function encodeBundle(b: Bundle): string {
   return toB64Url(deflateSync(strToU8(JSON.stringify(data)), { level: 9 }));
 }
 
-const str = (v: unknown, max: number) => (typeof v === "string" ? v.slice(0, max) : "");
+const str = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 const bool = (v: unknown, d: boolean) => (typeof v === "boolean" ? v : d);
 const date = (v: unknown) => (typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : null);
 const time = (v: unknown) => (typeof v === "string" && /^\d{2}:\d{2}(:\d{2})?$/.test(v) ? v.slice(0, 5) : null);

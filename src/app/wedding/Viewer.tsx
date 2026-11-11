@@ -26,11 +26,13 @@ export function Viewer() {
   }, []);
 
   // Next renders a fixed metadata <title> first in <head>; keep the couple's names in the tab.
-  const title = state && typeof state === "object" ? `${names(state.bundle.wedding).both} — Wedding Invitation` : "";
+  // Browsers collapse spaces in document.title, so compare the collapsed form;
+  // otherwise setting it would trigger the observer again and loop forever.
+  const title = state && typeof state === "object" ? `${names(state.bundle.wedding).both} — Wedding Invitation`.replace(/\s+/g, " ").trim() : "";
   useEffect(() => {
     if (!title) return;
     const apply = () => {
-      if (document.title !== title) document.title = title;
+      if (document.title.replace(/\s+/g, " ").trim() !== title) document.title = title;
     };
     apply();
     const obs = new MutationObserver(apply);

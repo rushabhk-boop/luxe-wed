@@ -43,8 +43,9 @@ export function defaultRsvp(weddingId: string): RsvpSettings {
 }
 
 export function names(w: Pick<Wedding, "bride_name" | "groom_name" | "bride_display" | "groom_display">) {
-  const a = w.bride_display || w.bride_name.split(/\s+/)[0] || "";
-  const b = w.groom_display || w.groom_name.split(/\s+/)[0] || "";
+  // trimmed: a stray space typed after a name must not show up (or break the tab title)
+  const a = (w.bride_display.trim() || w.bride_name.trim().split(/\s+/)[0] || "").trim();
+  const b = (w.groom_display.trim() || w.groom_name.trim().split(/\s+/)[0] || "").trim();
   return { a, b, both: a && b ? `${a} & ${b}` : a || b || "Our Wedding" };
 }
 

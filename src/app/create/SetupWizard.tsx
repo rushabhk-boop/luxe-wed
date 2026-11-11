@@ -218,7 +218,7 @@ function Review({ goTo, device, setDevice }: { goTo: (n: number) => void; device
   const tr = w.travel ?? {};
   const rows: { step: number; title: string; items: [string, string][] }[] = [
     { step: 1, title: "The couple", items: [["Names", `${w.bride_name} & ${w.groom_name}`], ["Shown as", names(w).both], ["Initials", w.initials], ["Hashtag", w.hashtag], ["Welcome", w.welcome_message], ["Families", w.family_names]] },
-    { step: 2, title: "Wedding day", items: [["Date", formatDate(w.wedding_date)], ["Time", formatTime(w.wedding_time)], ["Venue", [w.venue, w.city].filter(Boolean).join(", ")], ["Address", w.venue_address], ["Language", LANGUAGES.find((l) => l.key === w.language)?.name ?? ""], ["Time zone", w.timezone]] },
+    { step: 2, title: "Wedding day", items: [["Date", formatDate(w.wedding_date)], ["Time", formatTime(w.wedding_time)], ["Venue", [w.venue, w.city].map((x) => x?.trim()).filter(Boolean).join(", ")], ["Address", w.venue_address], ["Language", LANGUAGES.find((l) => l.key === w.language)?.name ?? ""], ["Time zone", w.timezone]] },
     { step: 3, title: `Functions (${events.length})`, items: events.map((e) => [e.name || "Untitled", [formatDate(e.event_date, "en", "short"), formatTime(e.start_time), e.venue].filter(Boolean).join(" · ")]) },
     { step: 4, title: "Families", items: family.hidden ? [["Section", "Hidden"]] : [["Bride's parents", family.bride_parents], ["Groom's parents", family.groom_parents], ["Grandparents", family.grandparents]] },
     { step: 5, title: "Travel", items: [["Maps link", w.maps_url], ["Airport", tr.airport ?? ""], ["Railway", tr.railway ?? ""], ["Hotels", tr.hotels ?? ""], ["Parking", tr.parking ?? ""]] },
