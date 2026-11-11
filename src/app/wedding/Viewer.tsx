@@ -25,9 +25,18 @@ export function Viewer() {
     return () => window.removeEventListener("hashchange", read);
   }, []);
 
+  // Next renders a fixed metadata <title> first in <head>; keep the couple's names in the tab.
+  const title = state && typeof state === "object" ? `${names(state.bundle.wedding).both} — Wedding Invitation` : "";
   useEffect(() => {
-    if (state && typeof state === "object") document.title = `${names(state.bundle.wedding).both} — Wedding Invitation`;
-  }, [state]);
+    if (!title) return;
+    const apply = () => {
+      if (document.title !== title) document.title = title;
+    };
+    apply();
+    const obs = new MutationObserver(apply);
+    obs.observe(document.head, { childList: true, subtree: true, characterData: true });
+    return () => obs.disconnect();
+  }, [title]);
 
   if (state === null) return <div className="min-h-svh" />;
   if (state === "empty" || state === "bad") {
