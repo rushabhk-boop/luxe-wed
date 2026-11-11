@@ -66,7 +66,8 @@ function wrap(ctx: Ctx, text: string, width: number, maxLines: number): string[]
   if (line) lines.push(line);
   if (lines.length > maxLines) {
     const kept = lines.slice(0, maxLines);
-    kept[maxLines - 1] = kept[maxLines - 1].replace(/\s*\S*$/, "") + "…";
+    const last = kept[maxLines - 1];
+    kept[maxLines - 1] = (last.includes(" ") ? last.replace(/\s*\S*$/, "") : last.slice(0, -1)) + "…";
     return kept;
   }
   return lines;
@@ -101,9 +102,14 @@ function divider(ctx: Ctx, cx: number, y: number, half: number, accent: string) 
 function ornament(ctx: Ctx, theme: ThemeKey, accent: string, top: number, bottom: number) {
   const cx = POSTER_W / 2;
   ctx.save();
-  ctx.strokeStyle = alpha(accent, 0.28);
+  const fade = ctx.createLinearGradient(0, top, 0, bottom);
+  fade.addColorStop(0, alpha(accent, 0.32));
+  fade.addColorStop(0.55, alpha(accent, 0.22));
+  fade.addColorStop(1, alpha(accent, 0));
+  ctx.strokeStyle = theme === "botanical" ? alpha(accent, 0.17) : fade;
   ctx.lineWidth = 2;
   if (theme === "celestial") {
+    ctx.strokeStyle = alpha(accent, 0.28);
     // crescent moon and scattered stars
     ctx.beginPath();
     ctx.arc(cx, top + 70, 60, 0, Math.PI * 2);
@@ -117,7 +123,7 @@ function ornament(ctx: Ctx, theme: ThemeKey, accent: string, top: number, bottom
     for (let i = 0; i < 26; i++) {
       const x = 140 + ((i * 397) % (POSTER_W - 280));
       const y = 160 + ((i * 613) % (POSTER_H - 520));
-      if (y > POSTER_H - 560 || (Math.abs(x - POSTER_W / 2) < 640 && y > 380 && y < 1000)) continue; // keep text and QR clear
+      if (y > POSTER_H - 560 || (Math.abs(x - POSTER_W / 2) < 620 && y > 360)) continue; // keep text and QR clear
       const r = 3 + (i % 4) * 2;
       ctx.beginPath();
       ctx.moveTo(x, y - r * 2);
@@ -240,7 +246,7 @@ export async function drawPoster(bundle: Bundle, url: string): Promise<HTMLCanva
   ctx.fillRect(0, 0, POSTER_W, POSTER_H);
 
   frame(ctx, theme, pal.accent);
-  ornament(ctx, theme, pal.accent, 200, 1130);
+  ornament(ctx, theme, pal.accent, 200, 1000);
 
   // eyebrow
   ctx.fillStyle = pal.muted;
@@ -326,8 +332,9 @@ export async function drawPoster(bundle: Bundle, url: string): Promise<HTMLCanva
       const x = cols === 2 && !lone ? cx + (i % 2 ? 310 : -310) : cx;
       const ry = y + Math.floor(i / cols) * rowH;
       ctx.fillStyle = pal.ink;
-      ctx.font = `400 ${Math.round(rowH * 0.4)}px ${fDisplay}`;
-      ctx.fillText(wrap(ctx, upper ? (e.name || "Event").toUpperCase() : e.name || "Event", colW, 1)[0] ?? "", x, ry + rowH * 0.4);
+      const title = upper ? (e.name || "Event").toUpperCase() : e.name || "Event";
+      fit(ctx, title, (p) => `400 ${p}px ${fDisplay}`, Math.round(rowH * 0.4), colW - 20);
+      ctx.fillText(title, x, ry + rowH * 0.4);
       ctx.fillStyle = pal.muted;
       ctx.font = `400 ${Math.round(rowH * 0.235)}px ${fBody}`;
       const when = [formatDate(e.event_date, w.language, "short"), formatTime(e.start_time, w.language)].filter(Boolean).join("  ·  ");
