@@ -1,26 +1,92 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ==========================================================================
+   LUXE WED platform design system
+   Quiet luxury: ivory paper, warm ink, champagne accents, hairline borders.
+   ========================================================================== */
+@theme {
+  --color-ivory: #f8f4ec;
+  --color-paper: #fdfbf7;
+  --color-sand: #efe7d9;
+  --color-beige: #e6dccb;
+  --color-champagne: #c4a77d;
+  --color-gold: #a88a5c;
+  --color-ink: #1f1b16;
+  --color-ink-soft: #4a433a;
+  --color-stone: #857c70;
+  --color-line: #e3dacb;
+  --color-line-strong: #cfc3ae;
+  --color-success: #4f6b4a;
+  --color-danger: #a23b2c;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-display: var(--f-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-sans: var(--f-jost), "Jost", system-ui, sans-serif;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+
+  --shadow-soft: 0 1px 0 rgba(31, 27, 22, 0.04), 0 18px 40px -28px rgba(31, 27, 22, 0.28);
+  --shadow-lift: 0 1px 0 rgba(31, 27, 22, 0.05), 0 30px 60px -30px rgba(31, 27, 22, 0.35);
+
+  --animate-fade-up: fade-up 0.9s cubic-bezier(0.2, 0.7, 0.1, 1) both;
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: none; }
   }
 }
 
+:root {
+  color-scheme: light;
+}
+
+html { scroll-behavior: smooth; }
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-ivory);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection { background: var(--color-champagne); color: var(--color-ink); }
+
+@utility eyebrow {
+  @apply text-[11px] font-medium uppercase tracking-[0.3em] text-stone;
+}
+@utility display {
+  @apply font-display font-light tracking-[-0.01em];
+}
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 px-6 py-3.5 text-[11px] font-medium uppercase tracking-[0.22em] transition-all duration-300 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 rounded-xs whitespace-nowrap;
+}
+@utility btn-primary { @apply btn bg-ink text-ivory hover:bg-ink-soft; }
+@utility btn-gold { @apply btn bg-champagne text-ink hover:bg-gold hover:text-ivory; }
+@utility btn-outline { @apply btn border border-ink/80 text-ink hover:bg-ink hover:text-ivory; }
+@utility btn-ghost { @apply btn border border-line text-ink-soft hover:border-ink hover:text-ink; }
+@utility btn-sm { @apply px-4 py-2.5 text-[10px]; }
+@utility btn-danger { @apply btn border border-danger/40 text-danger hover:bg-danger hover:text-ivory; }
+@utility card { @apply bg-paper border border-line rounded-xs; }
+@utility field-label { @apply block text-[11px] font-medium uppercase tracking-[0.2em] text-stone mb-2; }
+@utility input {
+  @apply w-full bg-paper border border-line rounded-xs px-4 py-3 text-[15px] text-ink placeholder:text-stone/60 outline-none transition-colors focus:border-ink;
+}
+@utility hint { @apply mt-1.5 text-xs text-stone; }
+@utility error { @apply mt-1.5 text-xs text-danger; }
+@utility link { @apply underline decoration-line-strong underline-offset-4 hover:decoration-ink transition-colors; }
+@utility chip {
+  @apply inline-flex items-center gap-2 border border-line bg-paper px-3.5 py-2 text-[13px] text-ink-soft transition-colors hover:border-ink cursor-pointer rounded-xs;
+}
+@utility chip-on { @apply border-ink bg-ink text-ivory hover:border-ink; }
+
+.hairline-grid {
+  background-image:
+    linear-gradient(to right, rgba(31, 27, 22, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(31, 27, 22, 0.05) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+.reveal { animation: var(--animate-fade-up); }
+@media (prefers-reduced-motion: reduce) {
+  .reveal, html { animation: none !important; scroll-behavior: auto; }
 }
